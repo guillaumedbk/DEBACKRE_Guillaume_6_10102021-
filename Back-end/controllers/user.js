@@ -6,11 +6,14 @@ const CryptoJS = require('crypto-js');
 require('dotenv').config()
 
 exports.signup = (req, res, next)=>{
+  var key = CryptoJS.enc.Hex.parse(process.env.Crypto_key); 
+  var iv = CryptoJS.enc.Hex.parse(process.env.Crypto_iv); 
+  let encryptedMail = CryptoJS.AES.encrypt(req.body.email, key, { iv: iv }).toString();
 
     bcrypt.hash(req.body.password, 10)
     .then((hash) => {
         const user = new User({
-            email: req.body.email,
+            email: encryptedMail,
             password: hash
         });
     user.save()
@@ -20,8 +23,11 @@ exports.signup = (req, res, next)=>{
   }
 
 exports.login = (req, res, next) => {
- 
-    User.findOne({ email: req.body.email })
+  var key = CryptoJS.enc.Hex.parse(process.env.Crypto_key); 
+  var iv = CryptoJS.enc.Hex.parse(process.env.Crypto_iv); 
+  let encryptedMail = CryptoJS.AES.encrypt(req.body.email, key, { iv: iv }).toString();
+
+    User.findOne({ email: encryptedMail })
       .then(user => {
         if (!user) {
           return res.status(401).json({ error: 'Utilisateur non trouvé !' });
