@@ -19,6 +19,7 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
+
 //CONNEXION BDD
 mongoose.connect('mongodb+srv://Guillaume:Guillaume@cluster0.oaur9.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   { useNewUrlParser: true,
